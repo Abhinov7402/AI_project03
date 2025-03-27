@@ -7,26 +7,132 @@
 Answer the supplemental questions here! Make sure you follow the format if it is asked
 Q1#######################
 QS1.1: 
+Answer: 
+The method computeActionFromValues(state) determines the best action to take from a given state based on current value estimates. 
+It iterates over all legal actions available in the given state using mdp.getPossibleActions(state).
+For each action, it calculates the corresponding Q-value by calling computeQValueFromValues(state, action). 
+The action with the highest Q-value is selected as the optimal action. 
+If the state is terminal and has no legal actions, the method returns None.
+
 
 QS1.2:
+Answer:
+The method computeQValueFromValues(state, action) calculates the expected utility of taking a specific action in a given state. 
+It accesses the transition model using mdp.getTransitionStatesAndProbs(state, action) to get all possible next states and their associated probabilities. 
+For each possible next state, the method adds the immediate reward from the MDP and the discounted value of the next state (based on current estimates in self.values). 
+The final Q-value is the sum of these expected values, weighted by their transition probabilities.
 
 Q3#######################
 
 QS3.1: 
+Answer:
+question3a: Prefer the close exit (+1), risking the cliff (-10)
+Parameters:  discount = 0.2, noise = 0.0, livingReward = -1
+The low discount factor (0.2) causes the agent to prioritize immediate rewards over future ones, 
+making the nearby +1 exit more appealing than the distant +10. The living reward is negative, 
+pushing the agent to terminate quickly. Zero noise ensures the agent can reliably take the shortest path, 
+even if it involves passing close to the cliff. This combination encourages the agent 
+to risk the cliff for a faster exit.
+
+Counter Example:
+A high discount factor would make the future rewards significant, encouraging
+agent to aim for the distant (+10) exit rather than the close +1 exit.
+
+question3b: Prefer the close exit (+1), avoiding the cliff (-10) 
+Answer: Parameters: discount = 0.1, noise = 0.05, livingReward = 0.0
+The low discount factor (0.1) makes the agent prioritize immediate rewards over future ones.
+Small noise adds slight randomness to movement, making risky paths less desirable, while zero living reward
+provides no incentive for moving indefinitely, thus the agent focuses on reaching terminal state safely.
+
+Counter example:
+If the noise is zero, the agent takes direct path risking cliff.
+If discount is high, the agent might consider distant exit(+10).
+
+
+question3c: Prefer the distant exit (+10), risking the cliff (-10)
+Parameters:  discount = 0.2, noise = 0.0, livingReward = 1.0
+Here, a positive living reward incentivizes longer survival, while the low discount still values immediate outcomes. Because the +10 reward is larger and the noise is zero, 
+the agent chooses the shortest path to it — even if it involves risky moves near the cliff — since there's no uncertainty in movement.
+
+Counter Example:
+The negative living reward pushes the agent to exit as fast as possible, 
+thus it prefers closest reward(+1) instead of going for distant rewards.
+ 
+question3d: Prefer the distant exit (+10), avoiding the cliff (-10)  
+Answer: discount = 0.9, noise = 0.5, livingReward = 0.0
+
+Here, high discount factor(0.9) makes future rewards significant.
+Moderate noise (0.5) encourages agent to avoid risky path near cliff.
+Since the living reward is zero, the agent will head toward a terminal state.
+
+Counter example:
+If the noise is zero, the agent takes direct path risking cliff.
+If discount is low, the agent might consider nearest exit(+1).
+
+
+
+question3e: Avoid both exits and the cliff (never terminate)  
+Parameters:  discount = 0.2, noise = 0.5, livingReward = 0.0
+
+Due to the low discount factor, the rewards are not very valuable.
+Additionally, the high noise(0.5) discourages direct paths to exit, and
+the living reward is zero. Since there is no incentive to reach an exit, along
+with the increased randomness (caused by noise), the agent effectively
+wanders around indefinitely, avoiding both exits and cliffs.
+
+counter example:
+If discount is 0.9, the agent would move toward long term rewards and would eventually choose an exit.
+ 
 Q5#######################
 
 QS5.1:
+Answer:
+The Q-learning agent learns optimal policies by interacting with the environment and updating Q-values using:
+- getQValue: Returns the Q-value for a (state, action) pair, defaulting to 0.0 if unseen.
+- computeValueFromQValues: Returns the highest Q-value over all legal actions in a state, or 0.0 for terminal states.
+- computeActionFromQValues: Returns the action with the highest Q-value in the given state.
+- getAction: Uses ε-greedy strategy to choose between exploration (random action) and exploitation (best known action).
+- update: Updates Q-values based on the Q-learning formula using the reward and estimated future value.
+- These methods allow the agent to learn from trial-and-error without needing a full model of the environment.
 
 QS5.2 [optional]:
 
+For noise=0   (Output filename: Q5.2_b(end)(noise0) )
+
+EPISODE 5 COMPLETE: RETURN WAS 0.5904900000000002
+AVERAGE RETURNS FROM START STATE: 0.5904900000000002
+
+For noise = 0.2   (Output filename: Q5.2_b(end)(noise02))
+
+EPISODE 5 COMPLETE: RETURN WAS 0.38742048900000015
+AVERAGE RETURNS FROM START STATE: 0.30187029780000013
+
+Here we can observe that for noise = 0, the return is maximum (0.5904900000000002) in all states as, the optimal policy 
+is reached by the agent in optimal number of steps.
+
+But for noise = 0.2, the return is reduced in each episode as the agent moves randomly once in a while, not always following the optimal path.
+
 Q6#######################
 QS6.1:
-QS6.2 [optional]:
+Answer:
+- With ε = 0.1, the agent mostly exploits the best-known actions, occasionally exploring. 
+This leads to stable behavior and convergence toward the optimal policy over time.
 
+- With ε = 0.9, the agent heavily explores, often choosing random actions. 
+This results in more unpredictable movement and slower learning.
+
+- The observed behaviors match expectations: lower epsilon promotes consistent performance, 
+while higher epsilon increases exploration and randomness.
+
+QS6.2 [optional]:
+https://drive.google.com/file/d/1FB14_IBs6wg2Kj1rPxFaYfGIzq-GaEBl/view?usp=drive_link
 
 Q7#######################
 QS7.1
-
+Answer: 
+There is no epsilon or learning rate value for which it is highly likely(greater than 99%)
+that the optimal policy will be learned after 50 iterations.
+It may require more than 50 iterations to achieve.
 
 
 
